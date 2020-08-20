@@ -14,68 +14,6 @@ namespace CompareExcelFiles.Library
             License.SetLicense("Aspose.Total.lic");
         }
 
-        //public static string GetColumnHeading(string docName, string worksheetName, string cellName)
-
-        //{
-        //    // Open the document as read-only.
-        //    using (SpreadsheetDocument document = SpreadsheetDocument.Open(docName, false))
-
-        //    {
-        //        IEnumerable<Sheet> sheets = document.WorkbookPart.Workbook.Descendants<Sheet>().Where(s => s.Name == worksheetName);
-
-        //        if (sheets.Count() == 0)
-
-        //        {
-        //            // The specified worksheet does not exist.
-
-        //            return null;
-        //        }
-
-        //        WorksheetPart worksheetPart = (WorksheetPart)document.WorkbookPart.GetPartById(sheets.First().Id);
-
-        //        // Get the column name for the specified cell.
-
-        //        string columnName = GetColumnName(cellName);
-
-        //        // Get the cells in the specified column and order them by row.
-
-        //        IEnumerable<Cell> cells = worksheetPart.Worksheet.Descendants<Cell>().Where(c => string.Compare(GetColumnName(c.CellReference.Value), columnName, true) == 0)
-
-        //            .OrderBy(r => GetRowIndex(r.CellReference));
-
-        //        if (cells.Count() == 0)
-
-        //        {
-        //            // The specified column does not exist.
-
-        //            return null;
-        //        }
-
-        //        // Get the first cell in the column.
-
-        //        Cell headCell = cells.First();
-
-        //        // If the content of the first cell is stored as a shared string, get the text of the first cell
-
-        //        // from the SharedStringTablePart and return it. Otherwise, return the string value of the cell.
-
-        //        if (headCell.DataType != null && headCell.DataType.Value == CellValues.SharedString)
-
-        //        {
-        //            SharedStringTablePart shareStringPart = document.WorkbookPart.GetPartsOfType<SharedStringTablePart>().First();
-
-        //            SharedStringItem[] items = shareStringPart.SharedStringTable.Elements<SharedStringItem>().ToArray();
-
-        //            return items[int.Parse(headCell.CellValue.Text)].InnerText;
-        //        }
-        //        else
-
-        //        {
-        //            return headCell.CellValue.Text;
-        //        }
-        //    }
-        //}
-
         public static Workbook OpenFile(string path)
         {
             // open workbook
@@ -113,28 +51,41 @@ namespace CompareExcelFiles.Library
             return headers;
         }
 
-        public static Compare((int, int) columnIndices)
+        public static void Compare(CompareColumns compareColumns)
         {
+            System.Console.WriteLine($"Comparing {compareColumns.ColumnNames.Item1} and {compareColumns.ColumnNames.Item2}");
+            var worksheet1 = compareColumns.Workbooks.Item1.Worksheets[0];
+            var worksheet2 = compareColumns.Workbooks.Item2.Worksheets[0];
 
-        }
+            // for each row for worksheet1 / column 1, search for it in worksheet2
+            for (int i = 1; i <= worksheet1.Cells.MaxDataRow; i++)
+            {
+                var cellToFind = worksheet1.Cells.GetCell(i, compareColumns.ColumnIndices.Item1);
 
-        // Given a cell name, parses the specified cell to get the column name.
-        private static string GetColumnName(string cellName)
-        {
-            // Create a regular expression to match the column name portion of the cell name.
-            Regex regex = new Regex("[A-Za-z]+");
-            Match match = regex.Match(cellName);
-            return match.Value;
-        }
+                if (cellToFind == null || cellToFind.Value == null)
+                {
+                    System.Console.WriteLine($"[{i}, {compareColumns.ColumnIndices.Item1}] cellToFind is null / cellToFind.Value is null");
+                    continue;
+                }
 
-        // Given a cell name, parses the specified cell to get the row index.
+                // look for the cell's value in worksheet2
+                for (int j = 1; j < worksheet2.Cells.MaxDataRow; j++)
+                {
+                    var cellToSearch = worksheet2.Cells.GetCell(j, compareColumns.ColumnIndices.Item2);
 
-        private static uint GetRowIndex(string cellName)
-        {
-            // Create a regular expression to match the row index portion the cell name.
-            Regex regex = new Regex(@"\d+");
-            Match match = regex.Match(cellName);
-            return uint.Parse(match.Value);
+                    if (cellToSearch == null || cellToSearch.Value == null)
+                    {
+                        System.Console.WriteLine($"[{j}, {compareColumns.ColumnIndices.Item2}] cellToFind is null / cellToFind.Value is null");
+                        continue;
+                    }
+
+                    if (cellToFind.Value.ToString().Equals(cellToSearch.Value.ToString()))
+                    {
+                        System.Console.WriteLine($"found a MATCH! [{i}, {compareColumns.ColumnIndices.Item1}] '{cellToFind.Value}' == " +
+                            $"'[{j}, {compareColumns.ColumnIndices.Item2}] '{cellToSearch.Value}'");
+                    }
+                }
+            }
         }
     }
 }

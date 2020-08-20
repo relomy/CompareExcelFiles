@@ -32,13 +32,27 @@ namespace CompareExcelFiles.ConsoleUI
                 {
                     ColumnNames = ("last name", "last name"),
                     ColumnIndices = (headers1["last name"], headers2["last name"]),
+                    Workbooks = (workbook1, workbook2),
                 },
                 new CompareColumns()
                 {
                     ColumnNames = ("first name", "first name"),
                     ColumnIndices = (headers1["first name"], headers2["first name"]),
+                    Workbooks = (workbook1, workbook2),
+                },
+                new CompareColumns()
+                {
+                    ColumnNames = ("id", "id"),
+                    ColumnIndices = (headers1["id"], headers2["id"]),
+                    Workbooks = (workbook1, workbook2),
                 },
             };
+
+            // compare columns
+            foreach (var compareColumn in compareColumns)
+            {
+                ExcelHelper.Compare(compareColumn);
+            }
 
 
             // display results
@@ -50,6 +64,7 @@ namespace CompareExcelFiles.ConsoleUI
             {
                 Console.WriteLine($"Key: {header.Key} Value: {header.Value}");
             }
+            Console.WriteLine();
         }
     }
 }

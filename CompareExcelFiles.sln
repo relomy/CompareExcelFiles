@@ -5,9 +5,14 @@ VisualStudioVersion = 16.0.30330.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompareExcelFiles.WPF", "CompareExcelFiles.GUI\CompareExcelFiles.WPF.csproj", "{22F09DE1-0A36-4F54-BD0D-BCE5A4683808}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompareExcelFiles.Library", "CompareExcelFiles.Library\CompareExcelFiles.Library.csproj", "{E660B981-7691-4EA0-A2F8-43DECBE8F3B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompareExcelFiles.Library", "CompareExcelFiles.Library\CompareExcelFiles.Library.csproj", "{E660B981-7691-4EA0-A2F8-43DECBE8F3B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompareExcelFiles.ConsoleUI", "CompareExcelFiles.Console\CompareExcelFiles.ConsoleUI.csproj", "{6E98622E-025E-4625-9373-DCB72F4D3618}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompareExcelFiles.ConsoleUI", "CompareExcelFiles.Console\CompareExcelFiles.ConsoleUI.csproj", "{6E98622E-025E-4625-9373-DCB72F4D3618}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CE685B50-2975-475C-9970-DF48A7371B09}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
